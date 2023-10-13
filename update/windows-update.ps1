@@ -168,11 +168,12 @@ Write-Output 'Searching for Windows updates...'
 $updatesToDownloadSize = 0
 $updatesToDownload = New-Object -ComObject 'Microsoft.Update.UpdateColl'
 $updatesToInstall = New-Object -ComObject 'Microsoft.Update.UpdateColl'
+$updateSession = New-Object -ComObject 'Microsoft.Update.Session'
+$updateSession.ClientApplicationID = 'packer-windows-update'
 while ($true) {
     try {
-        $updateSession = New-Object -ComObject 'Microsoft.Update.Session'
-        $updateSession.ClientApplicationID = 'packer-windows-update'
         $updateSearcher = $updateSession.CreateUpdateSearcher()
+        $updateSearcher.ServerSelection = 2
         $searchResult = $updateSearcher.Search($SearchCriteria)
         if ($searchResult.ResultCode -eq 2) {
             break
